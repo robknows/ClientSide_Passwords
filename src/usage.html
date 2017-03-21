@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+<script src="lib/forge.min.js"></script>
+<script type="text/javascript">
+    /* Given the plaintext as a string and the key in PEM format, this function
+       returns a string containing the base64 encoded ciphertext. */
+    function encryptPassword(plaintext, key) {
+        var publicKey = forge.pki.publicKeyFromPem(key);
+        var plainbytes = forge.util.createBuffer(plaintext, 'utf-8').getBytes();
+        var ciphertext = publicKey.encrypt(plainbytes, 'RSA-OAEP', {
+            md: forge.md.sha256.create(),
+            mgf1: {
+                md: forge.md.sha256.create()
+            }
+        });
+        return forge.util.encode64(ciphertext);
+
+    }
+</script>
+
+
+
+</body>
+</html>
